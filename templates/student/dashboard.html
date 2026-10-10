@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<h2>Welcome, {{ student.full_name }}</h2>
+{% if placed %}
+<div class="alert alert-success" role="alert">
+  🎉 Congratulations! You have been placed!
+</div>
+{% endif %}
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card text-white bg-primary mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Total Applications</h5>
+        <p class="card-text display-4">{{ total_applications }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-dark bg-warning mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Pending</h5>
+        <p class="card-text display-4">{{ pending_apps }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-white {% if placed %}bg-success{% else %}bg-secondary{% endif %} mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Status</h5>
+        <p class="card-text display-4">{% if placed %}Placed{% else %}Active{% endif %}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mb-4">
+  <a href="{{ url_for('student_drives') }}" class="btn btn-primary">Browse Drives</a>
+  <a href="{{ url_for('student_profile') }}" class="btn btn-secondary">My Profile</a>
+</div>
+
+<h4>Recent Applications</h4>
+{% if recent_applications %}
+<div class="table-responsive">
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Job Title</th>
+        <th>Company</th>
+        <th>Applied At</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for app in recent_applications %}
+      <tr>
+        <td>{{ app.drive.job_title }}</td>
+        <td>{{ app.drive.company.company_name }}</td>
+        <td>{{ app.applied_at.strftime('%Y-%m-%d %H:%M') if app.applied_at else '' }}</td>
+        <td>
+          {% if app.status == 'Applied' %}
+          <span class="badge bg-primary">{{ app.status }}</span>
+          {% elif app.status == 'Shortlisted' %}
+          <span class="badge bg-info">{{ app.status }}</span>
+          {% elif app.status == 'Interview' %}
+          <span class="badge bg-warning">{{ app.status }}</span>
+          {% elif app.status == 'Selected' %}
+          <span class="badge bg-success">{{ app.status }}</span>
+          {% elif app.status == 'Placed' %}
+          <span class="badge bg-dark">{{ app.status }}</span>
+          {% else %}
+          <span class="badge bg-secondary">{{ app.status }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p>No applications yet. <a href="{{ url_for('student_drives') }}">Browse drives</a></p>
+{% endif %}
+{% endblock %}

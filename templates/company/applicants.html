@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Applicants - {{ drive.job_title }}{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2>Applicants for: {{ drive.job_title }}</h2>
+    <p>Status: <span class="badge {% if drive.status == 'open' %}bg-success{% else %}bg-secondary{% endif %}">{{ drive.status }}</span></p>
+    <a href="{{ url_for('company_drives') }}" class="btn btn-outline-secondary btn-sm">&larr; Back to Drives</a>
+</div>
+
+{% if applications %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student Name</th>
+                <th>Department</th>
+                <th>CGPA</th>
+                <th>Applied At</th>
+                <th>Current Status</th>
+                <th>Update Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><a href="{{ url_for('company_view_student', id=app.student.id) }}">{{ app.student.full_name }}</a></td>
+                <td>{{ app.student.department }}</td>
+                <td>{{ app.student.cgpa }}</td>
+                <td>{{ app.applied_at.strftime('%Y-%m-%d %H:%M') if app.applied_at else '' }}</td>
+                <td>
+                    <span class="badge bg-info text-dark">{{ app.status }}</span>
+                </td>
+                <td>
+                    <form action="{{ url_for('company_update_app_status', id=app.id) }}" method="POST" class="d-flex gap-2">
+                        <select name="new_status" class="form-select form-select-sm" style="width: 120px;">
+                            <option value="Applied" {% if app.status == 'Applied' %}selected{% endif %}>Applied</option>
+                            <option value="Shortlisted" {% if app.status == 'Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                            <option value="Interview" {% if app.status == 'Interview' %}selected{% endif %}>Interview</option>
+                            <option value="Selected" {% if app.status == 'Selected' %}selected{% endif %}>Selected</option>
+                            <option value="Placed" {% if app.status == 'Placed' %}selected{% endif %}>Placed</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No applications yet.</div>
+{% endif %}
+{% endblock %}

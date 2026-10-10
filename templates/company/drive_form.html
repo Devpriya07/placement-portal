@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit Drive' if drive else 'Create Drive' }}{% endblock %}
+
+{% block content %}
+<h2>{{ 'Edit Drive' if drive else 'Create New Drive' }}</h2>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <form action="{{ url_for('company_edit_drive', id=drive.id) if drive else url_for('company_create_drive') }}" method="POST">
+            <div class="mb-3">
+                <label for="job_title" class="form-label">Job Title *</label>
+                <input type="text" class="form-control" id="job_title" name="job_title" value="{{ drive.job_title if drive else '' }}" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="job_description" class="form-label">Job Description</label>
+                <textarea class="form-control" id="job_description" name="job_description" rows="4">{{ drive.job_description if drive else '' }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="eligibility_criteria" class="form-label">Eligibility Criteria</label>
+                <textarea class="form-control" id="eligibility_criteria" name="eligibility_criteria" rows="3">{{ drive.eligibility_criteria if drive else '' }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="required_skills" class="form-label">Required Skills</label>
+                <input type="text" class="form-control" id="required_skills" name="required_skills" value="{{ drive.required_skills if drive else '' }}">
+            </div>
+            
+            <div class="mb-3">
+                <label for="experience_required" class="form-label">Experience Required</label>
+                <input type="text" class="form-control" id="experience_required" name="experience_required" placeholder="e.g., 0-2 years" value="{{ drive.experience_required if drive else '' }}">
+            </div>
+            
+            <div class="mb-3">
+                <label for="salary_range" class="form-label">Salary Range</label>
+                <input type="text" class="form-control" id="salary_range" name="salary_range" placeholder="e.g., 5-8 LPA" value="{{ drive.salary_range if drive else '' }}">
+            </div>
+            
+            <div class="mb-3">
+                <label for="deadline" class="form-label">Deadline *</label>
+                <input type="datetime-local" class="form-control" id="deadline" name="deadline" value="{{ drive.deadline.strftime('%Y-%m-%dT%H:%M') if drive and drive.deadline else '' }}" required>
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">{{ 'Update Drive' if drive else 'Create Drive' }}</button>
+                <a href="{{ url_for('company_drives') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

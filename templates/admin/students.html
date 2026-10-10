@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Manage Students{% endblock %}
+{% block content %}
+<h2 class="mb-4">Manage Students</h2>
+<form method="GET" action="{{ url_for('admin_students') }}" class="mb-4 d-flex">
+    <input type="text" name="search" value="{{ search or '' }}" class="form-control me-2" placeholder="Search students...">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+{% if students %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>CGPA</th>
+                <th>Blacklisted</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ student.full_name }}<br><small>{{ student.phone }}</small></td>
+                <td>{{ student.user.username }}</td>
+                <td>{{ student.user.email }}</td>
+                <td>{{ student.department }}</td>
+                <td>{{ student.cgpa }}</td>
+                <td>{{ 'Yes' if student.is_blacklisted else 'No' }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('admin_blacklist_student', id=student.id) }}">
+                        <button type="submit" class="btn btn-sm btn-{{ 'secondary' if student.is_blacklisted else 'dark' }}">
+                            {{ 'Unblacklist' if student.is_blacklisted else 'Blacklist' }}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No students found.</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}{{ drive.job_title }}{% endblock %}
+{% block content %}
+<h2>{{ drive.job_title }}</h2>
+<p class="text-muted">by {{ drive.company.company_name }}</p>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Job Description</h5>
+    <p class="card-text">{{ drive.job_description | replace('\n', '<br>') | safe }}</p>
+    
+    <h5 class="card-title mt-3">Eligibility Criteria</h5>
+    <p class="card-text">{{ drive.eligibility_criteria | replace('\n', '<br>') | safe }}</p>
+    
+    <h5 class="card-title mt-3">Required Skills</h5>
+    <p class="card-text">{{ drive.required_skills }}</p>
+
+    <h5 class="card-title mt-3">Experience Required</h5>
+    <p class="card-text">{{ drive.experience_required }}</p>
+
+    <h5 class="card-title mt-3">Salary Range</h5>
+    <p class="card-text">{{ drive.salary_range }}</p>
+
+    <h5 class="card-title mt-3">Deadline</h5>
+    <p class="card-text">{{ drive.deadline.strftime('%Y-%m-%d') if drive.deadline else 'Not Specified' }}</p>
+
+    <h5 class="card-title mt-3">Company Info</h5>
+    <p class="card-text">
+      <strong>Industry:</strong> {{ drive.company.industry }}<br>
+      {% if drive.company.website %}
+      <strong>Website:</strong> <a href="{{ drive.company.website }}" target="_blank">{{ drive.company.website }}</a>
+      {% endif %}
+    </p>
+  </div>
+</div>
+
+<div class="mb-4">
+  {% if already_applied %}
+  <div class="alert alert-info">
+    You have already applied. Status: <span class="badge bg-dark">{{ application.status }}</span>
+  </div>
+  {% elif drive.status == 'open' %}
+  <form action="{{ url_for('student_apply_drive', id=drive.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to apply for this drive?');">
+    <button type="submit" class="btn btn-success">Apply Now</button>
+  </form>
+  {% else %}
+  <div class="alert alert-secondary">
+    This drive is closed.
+  </div>
+  {% endif %}
+</div>
+
+<a href="{{ url_for('student_drives') }}" class="btn btn-outline-secondary">&laquo; Back to Drives</a>
+{% endblock %}

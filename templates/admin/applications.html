@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}All Applications{% endblock %}
+{% block content %}
+<h2 class="mb-4">All Applications</h2>
+<form method="GET" action="{{ url_for('admin_applications') }}" class="mb-4 d-flex">
+    <select name="status" class="form-select me-2">
+        <option value="" {% if not status_filter %}selected{% endif %}>All</option>
+        <option value="Applied" {% if status_filter == 'Applied' %}selected{% endif %}>Applied</option>
+        <option value="Shortlisted" {% if status_filter == 'Shortlisted' %}selected{% endif %}>Shortlisted</option>
+        <option value="Interview" {% if status_filter == 'Interview' %}selected{% endif %}>Interview</option>
+        <option value="Selected" {% if status_filter == 'Selected' %}selected{% endif %}>Selected</option>
+        <option value="Placed" {% if status_filter == 'Placed' %}selected{% endif %}>Placed</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+{% if applications %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Applied At</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ app.student.full_name }}</td>
+                <td>{{ app.drive.company.company_name }}</td>
+                <td>{{ app.drive.job_title }}</td>
+                <td>{{ app.applied_at.strftime('%d %b %Y') }}</td>
+                <td>
+                    {% if app.status == 'Applied' %}
+                        <span class="badge bg-primary">Applied</span>
+                    {% elif app.status == 'Shortlisted' %}
+                        <span class="badge bg-info">Shortlisted</span>
+                    {% elif app.status == 'Interview' %}
+                        <span class="badge bg-warning">Interview</span>
+                    {% elif app.status == 'Selected' %}
+                        <span class="badge bg-success">Selected</span>
+                    {% elif app.status == 'Placed' %}
+                        <span class="badge bg-dark">Placed</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ app.status }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No applications found.</div>
+{% endif %}
+{% endblock %}

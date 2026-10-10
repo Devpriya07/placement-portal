@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Placement Drives{% endblock %}
+{% block content %}
+<h2>Available Placement Drives</h2>
+<form action="{{ url_for('student_drives') }}" method="GET" class="d-flex mb-4">
+  <input class="form-control me-2" type="search" name="search" placeholder="Search by job title or skills..." value="{{ search }}">
+  <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+{% if drives %}
+<div class="row">
+  {% for drive in drives %}
+  <div class="col-md-6 mb-4">
+    <div class="card h-100">
+      <div class="card-header fw-bold">
+        {{ drive.job_title }}
+      </div>
+      <div class="card-body">
+        <p class="card-text"><strong>Company:</strong> {{ drive.company.company_name }}</p>
+        <p class="card-text"><strong>Salary Range:</strong> {{ drive.salary_range }}</p>
+        <p class="card-text"><strong>Experience:</strong> {{ drive.experience_required }}</p>
+        <p class="card-text"><strong>Deadline:</strong> {{ drive.deadline.strftime('%Y-%m-%d') if drive.deadline else 'N/A' }}</p>
+        <p class="card-text"><strong>Required Skills:</strong> <span class="badge bg-secondary">{{ drive.required_skills }}</span></p>
+      </div>
+      <div class="card-footer bg-transparent">
+        <a href="{{ url_for('student_drive_detail', id=drive.id) }}" class="btn btn-primary btn-sm">View Details</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info" role="alert">
+  No placement drives available at the moment.
+</div>
+{% endif %}
+{% endblock %}

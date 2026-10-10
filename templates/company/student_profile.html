@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Profile - {{ student.full_name }}{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h2>{{ student.full_name }}</h2>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-sm-3 fw-bold">Username</div>
+            <div class="col-sm-9">{{ student.user.username }}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-3 fw-bold">Email</div>
+            <div class="col-sm-9">{{ student.user.email }}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-3 fw-bold">Phone</div>
+            <div class="col-sm-9">{{ student.phone }}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-3 fw-bold">Department</div>
+            <div class="col-sm-9">{{ student.department }}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-3 fw-bold">CGPA</div>
+            <div class="col-sm-9">{{ student.cgpa }}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-3 fw-bold">Skills</div>
+            <div class="col-sm-9">{{ student.skills }}</div>
+        </div>
+        
+        {% if student.resume_filename %}
+        <div class="row mt-4">
+            <div class="col-sm-12">
+                <a href="{{ url_for('uploaded_file', filename=student.resume_filename) }}" class="btn btn-success" download>Download Resume</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<a href="javascript:history.back()" class="btn btn-secondary">&larr; Back</a>
+{% endblock %}

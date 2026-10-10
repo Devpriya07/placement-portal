@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Company Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ company.company_name }}</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Active Drives</h5>
+                <p class="card-text display-4">{{ active_drives }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Drives</h5>
+                <p class="card-text display-4">{{ total_drives }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Applicants</h5>
+                <p class="card-text display-4">{{ total_applicants }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="{{ url_for('company_create_drive') }}" class="btn btn-primary">Create New Drive</a>
+{% endblock %}

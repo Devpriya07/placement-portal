@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Company Profile{% endblock %}
+
+{% block content %}
+<h2>Company Profile</h2>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <form action="{{ url_for('company_profile') }}" method="POST">
+            <div class="mb-3">
+                <label for="company_name" class="form-label">Company Name *</label>
+                <input type="text" class="form-control" id="company_name" name="company_name" value="{{ company.company_name }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="industry" class="form-label">Industry</label>
+                <input type="text" class="form-control" id="industry" name="industry" value="{{ company.industry or '' }}" placeholder="e.g., Information Technology, Finance">
+            </div>
+            <div class="mb-3">
+                <label for="hr_contact" class="form-label">HR Contact</label>
+                <input type="text" class="form-control" id="hr_contact" name="hr_contact" value="{{ company.hr_contact or '' }}" placeholder="e.g., John Doe, +91-9876543210">
+            </div>
+            <div class="mb-3">
+                <label for="website" class="form-label">Website</label>
+                <input type="url" class="form-control" id="website" name="website" value="{{ company.website or '' }}" placeholder="https://www.example.com">
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+                <a href="{{ url_for('company_dashboard') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">Account Information</div>
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-sm-3 fw-bold">Username</div>
+            <div class="col-sm-9">{{ current_user.username }}</div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-sm-3 fw-bold">Email</div>
+            <div class="col-sm-9">{{ current_user.email }}</div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-sm-3 fw-bold">Approval Status</div>
+            <div class="col-sm-9">
+                {% if company.approval_status == 'approved' %}
+                    <span class="badge bg-success">Approved</span>
+                {% elif company.approval_status == 'pending' %}
+                    <span class="badge bg-warning">Pending</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-sm-3 fw-bold">Member Since</div>
+            <div class="col-sm-9">{{ current_user.created_at.strftime('%d %b %Y') }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
